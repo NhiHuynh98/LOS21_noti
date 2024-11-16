@@ -1354,162 +1354,162 @@ public class UsbDeviceManager implements ActivityTaskManagerInternal.ScreenObser
         }
 
         protected void updateUsbNotification(boolean force) {
-            if (mNotificationManager == null || !mUseUsbNotification
-                    || ("0".equals(getSystemProperty("persist.charging.notify", "")))) {
-                return;
-            }
+            // if (mNotificationManager == null || !mUseUsbNotification
+            //         || ("0".equals(getSystemProperty("persist.charging.notify", "")))) {
+            //     return;
+            // }
 
-            // Dont show the notification when connected to a USB peripheral
-            // and the link does not support PR_SWAP and DR_SWAP
-            if ((mHideUsbNotification || mInHostModeWithNoAccessoryConnected)
-                    && !mSupportsAllCombinations) {
-                if (mUsbNotificationId != 0) {
-                    mNotificationManager.cancelAsUser(null, mUsbNotificationId,
-                            UserHandle.ALL);
-                    mUsbNotificationId = 0;
-                    Slog.d(TAG, "Clear notification");
-                }
-                return;
-            }
+            // // Dont show the notification when connected to a USB peripheral
+            // // and the link does not support PR_SWAP and DR_SWAP
+            // if ((mHideUsbNotification || mInHostModeWithNoAccessoryConnected)
+            //         && !mSupportsAllCombinations) {
+            //     if (mUsbNotificationId != 0) {
+            //         mNotificationManager.cancelAsUser(null, mUsbNotificationId,
+            //                 UserHandle.ALL);
+            //         mUsbNotificationId = 0;
+            //         Slog.d(TAG, "Clear notification");
+            //     }
+            //     return;
+            // }
 
-            int id = 0;
-            int titleRes = 0;
-            Resources r = mContext.getResources();
-            CharSequence message = r.getText(
-                    com.android.internal.R.string.usb_notification_message);
-            if (mAudioAccessoryConnected && !mAudioAccessorySupported) {
-                titleRes = com.android.internal.R.string.usb_unsupported_audio_accessory_title;
-                id = SystemMessage.NOTE_USB_AUDIO_ACCESSORY_NOT_SUPPORTED;
-            } else if (mConnected) {
-                if (mCurrentFunctions == UsbManager.FUNCTION_MTP) {
-                    titleRes = com.android.internal.R.string.usb_mtp_notification_title;
-                    id = SystemMessage.NOTE_USB_MTP;
-                } else if (mCurrentFunctions == UsbManager.FUNCTION_PTP) {
-                    titleRes = com.android.internal.R.string.usb_ptp_notification_title;
-                    id = SystemMessage.NOTE_USB_PTP;
-                } else if (mCurrentFunctions == UsbManager.FUNCTION_MIDI) {
-                    titleRes = com.android.internal.R.string.usb_midi_notification_title;
-                    id = SystemMessage.NOTE_USB_MIDI;
-                } else if ((mCurrentFunctions == UsbManager.FUNCTION_RNDIS)
-                        || (mCurrentFunctions == UsbManager.FUNCTION_NCM)) {
-                    titleRes = com.android.internal.R.string.usb_tether_notification_title;
-                    id = SystemMessage.NOTE_USB_TETHER;
-                } else if (mCurrentFunctions == UsbManager.FUNCTION_UVC) {
-                    titleRes = com.android.internal.R.string.usb_uvc_notification_title;
-                    id = SystemMessage.NOTE_USB_UVC;
-                } else if (mCurrentFunctions == UsbManager.FUNCTION_ACCESSORY) {
-                    titleRes = com.android.internal.R.string.usb_accessory_notification_title;
-                    id = SystemMessage.NOTE_USB_ACCESSORY;
-                }
-                if (mSourcePower) {
-                    if (titleRes != 0) {
-                        message = r.getText(
-                                com.android.internal.R.string.usb_power_notification_message);
-                    } else {
-                        titleRes = com.android.internal.R.string.usb_supplying_notification_title;
-                        id = SystemMessage.NOTE_USB_SUPPLYING;
-                    }
-                } else if (titleRes == 0) {
-                    titleRes = com.android.internal.R.string.usb_charging_notification_title;
-                    id = SystemMessage.NOTE_USB_CHARGING;
-                }
-            } else if (mSourcePower) {
-                titleRes = com.android.internal.R.string.usb_supplying_notification_title;
-                id = SystemMessage.NOTE_USB_SUPPLYING;
-            } else if (mHostConnected && mSinkPower && (mUsbCharging || mUsbAccessoryConnected)) {
-                titleRes = com.android.internal.R.string.usb_charging_notification_title;
-                id = SystemMessage.NOTE_USB_CHARGING;
-            } else if (mSinkPower && mConnectedToDataDisabledPort
-                    && mPowerBrickConnectionStatus ==
-                            UsbPortStatus.POWER_BRICK_STATUS_DISCONNECTED) {
-                // Show charging notification when USB Data is disabled on the port, and not
-                // connected to a wall charger.
-                titleRes = com.android.internal.R.string.usb_charging_notification_title;
-                id = SystemMessage.NOTE_USB_CHARGING;
-            }
-            if (id != mUsbNotificationId || force) {
-                // clear notification if title needs changing
-                if (mUsbNotificationId != 0) {
-                    mNotificationManager.cancelAsUser(null, mUsbNotificationId,
-                            UserHandle.ALL);
-                    Slog.d(TAG, "Clear notification");
-                    mUsbNotificationId = 0;
-                }
-                // Not relevant for automotive and watch.
-                if ((mContext.getPackageManager().hasSystemFeature(
-                        PackageManager.FEATURE_AUTOMOTIVE)
-                        || mContext.getPackageManager().hasSystemFeature(
-                        PackageManager.FEATURE_WATCH))
-                        && id == SystemMessage.NOTE_USB_CHARGING) {
-                    mUsbNotificationId = 0;
-                    return;
-                }
+            // int id = 0;
+            // int titleRes = 0;
+            // Resources r = mContext.getResources();
+            // CharSequence message = r.getText(
+            //         com.android.internal.R.string.usb_notification_message);
+            // if (mAudioAccessoryConnected && !mAudioAccessorySupported) {
+            //     titleRes = com.android.internal.R.string.usb_unsupported_audio_accessory_title;
+            //     id = SystemMessage.NOTE_USB_AUDIO_ACCESSORY_NOT_SUPPORTED;
+            // } else if (mConnected) {
+            //     if (mCurrentFunctions == UsbManager.FUNCTION_MTP) {
+            //         titleRes = com.android.internal.R.string.usb_mtp_notification_title;
+            //         id = SystemMessage.NOTE_USB_MTP;
+            //     } else if (mCurrentFunctions == UsbManager.FUNCTION_PTP) {
+            //         titleRes = com.android.internal.R.string.usb_ptp_notification_title;
+            //         id = SystemMessage.NOTE_USB_PTP;
+            //     } else if (mCurrentFunctions == UsbManager.FUNCTION_MIDI) {
+            //         titleRes = com.android.internal.R.string.usb_midi_notification_title;
+            //         id = SystemMessage.NOTE_USB_MIDI;
+            //     } else if ((mCurrentFunctions == UsbManager.FUNCTION_RNDIS)
+            //             || (mCurrentFunctions == UsbManager.FUNCTION_NCM)) {
+            //         titleRes = com.android.internal.R.string.usb_tether_notification_title;
+            //         id = SystemMessage.NOTE_USB_TETHER;
+            //     } else if (mCurrentFunctions == UsbManager.FUNCTION_UVC) {
+            //         titleRes = com.android.internal.R.string.usb_uvc_notification_title;
+            //         id = SystemMessage.NOTE_USB_UVC;
+            //     } else if (mCurrentFunctions == UsbManager.FUNCTION_ACCESSORY) {
+            //         titleRes = com.android.internal.R.string.usb_accessory_notification_title;
+            //         id = SystemMessage.NOTE_USB_ACCESSORY;
+            //     }
+            //     if (mSourcePower) {
+            //         if (titleRes != 0) {
+            //             message = r.getText(
+            //                     com.android.internal.R.string.usb_power_notification_message);
+            //         } else {
+            //             titleRes = com.android.internal.R.string.usb_supplying_notification_title;
+            //             id = SystemMessage.NOTE_USB_SUPPLYING;
+            //         }
+            //     } else if (titleRes == 0) {
+            //         titleRes = com.android.internal.R.string.usb_charging_notification_title;
+            //         id = SystemMessage.NOTE_USB_CHARGING;
+            //     }
+            // } else if (mSourcePower) {
+            //     titleRes = com.android.internal.R.string.usb_supplying_notification_title;
+            //     id = SystemMessage.NOTE_USB_SUPPLYING;
+            // } else if (mHostConnected && mSinkPower && (mUsbCharging || mUsbAccessoryConnected)) {
+            //     titleRes = com.android.internal.R.string.usb_charging_notification_title;
+            //     id = SystemMessage.NOTE_USB_CHARGING;
+            // } else if (mSinkPower && mConnectedToDataDisabledPort
+            //         && mPowerBrickConnectionStatus ==
+            //                 UsbPortStatus.POWER_BRICK_STATUS_DISCONNECTED) {
+            //     // Show charging notification when USB Data is disabled on the port, and not
+            //     // connected to a wall charger.
+            //     titleRes = com.android.internal.R.string.usb_charging_notification_title;
+            //     id = SystemMessage.NOTE_USB_CHARGING;
+            // }
+            // if (id != mUsbNotificationId || force) {
+            //     // clear notification if title needs changing
+            //     if (mUsbNotificationId != 0) {
+            //         mNotificationManager.cancelAsUser(null, mUsbNotificationId,
+            //                 UserHandle.ALL);
+            //         Slog.d(TAG, "Clear notification");
+            //         mUsbNotificationId = 0;
+            //     }
+            //     // Not relevant for automotive and watch.
+            //     if ((mContext.getPackageManager().hasSystemFeature(
+            //             PackageManager.FEATURE_AUTOMOTIVE)
+            //             || mContext.getPackageManager().hasSystemFeature(
+            //             PackageManager.FEATURE_WATCH))
+            //             && id == SystemMessage.NOTE_USB_CHARGING) {
+            //         mUsbNotificationId = 0;
+            //         return;
+            //     }
 
-                if (id != 0) {
-                    CharSequence title = r.getText(titleRes);
-                    PendingIntent pi;
-                    String channel;
+            //     if (id != 0) {
+            //         CharSequence title = r.getText(titleRes);
+            //         PendingIntent pi;
+            //         String channel;
 
-                    if (titleRes
-                            != com.android.internal.R.string
-                            .usb_unsupported_audio_accessory_title) {
-                        Intent intent = Intent.makeRestartActivityTask(
-                                new ComponentName("com.android.settings",
-                                        "com.android.settings.Settings$UsbDetailsActivity"));
-                        // Simple notification clicks are immutable
-                        pi = PendingIntent.getActivityAsUser(mContext, 0,
-                                intent, PendingIntent.FLAG_IMMUTABLE, null, UserHandle.CURRENT);
-                        channel = SystemNotificationChannels.USB;
-                    } else {
-                        final Intent intent = new Intent();
-                        intent.setClassName("com.android.settings",
-                                "com.android.settings.HelpTrampoline");
-                        intent.putExtra(Intent.EXTRA_TEXT,
-                                "help_url_audio_accessory_not_supported");
+            //         if (titleRes
+            //                 != com.android.internal.R.string
+            //                 .usb_unsupported_audio_accessory_title) {
+            //             Intent intent = Intent.makeRestartActivityTask(
+            //                     new ComponentName("com.android.settings",
+            //                             "com.android.settings.Settings$UsbDetailsActivity"));
+            //             // Simple notification clicks are immutable
+            //             pi = PendingIntent.getActivityAsUser(mContext, 0,
+            //                     intent, PendingIntent.FLAG_IMMUTABLE, null, UserHandle.CURRENT);
+            //             channel = SystemNotificationChannels.USB;
+            //         } else {
+            //             final Intent intent = new Intent();
+            //             intent.setClassName("com.android.settings",
+            //                     "com.android.settings.HelpTrampoline");
+            //             intent.putExtra(Intent.EXTRA_TEXT,
+            //                     "help_url_audio_accessory_not_supported");
 
-                        if (mContext.getPackageManager().resolveActivity(intent, 0) != null) {
-                            // Simple notification clicks are immutable
-                            pi = PendingIntent.getActivity(mContext, 0, intent,
-                                    PendingIntent.FLAG_IMMUTABLE);
-                        } else {
-                            pi = null;
-                        }
+            //             if (mContext.getPackageManager().resolveActivity(intent, 0) != null) {
+            //                 // Simple notification clicks are immutable
+            //                 pi = PendingIntent.getActivity(mContext, 0, intent,
+            //                         PendingIntent.FLAG_IMMUTABLE);
+            //             } else {
+            //                 pi = null;
+            //             }
 
-                        channel = SystemNotificationChannels.ALERTS;
-                        message = r.getText(
-                                com.android.internal.R.string
-                                        .usb_unsupported_audio_accessory_message);
-                    }
+            //             channel = SystemNotificationChannels.ALERTS;
+            //             message = r.getText(
+            //                     com.android.internal.R.string
+            //                             .usb_unsupported_audio_accessory_message);
+            //         }
 
-                    Notification.Builder builder = new Notification.Builder(mContext, channel)
-                            .setSmallIcon(com.android.internal.R.drawable.stat_sys_data_usb)
-                            .setWhen(0)
-                            .setOngoing(true)
-                            .setTicker(title)
-                            .setDefaults(0)  // please be quiet
-                            .setColor(mContext.getColor(
-                                    com.android.internal.R.color
-                                            .system_notification_accent_color))
-                            .setContentTitle(title)
-                            .setContentText(message)
-                            .setSubText(Build.ID)
-                            .setContentIntent(pi)
-                            .setVisibility(Notification.VISIBILITY_PUBLIC);
+            //         Notification.Builder builder = new Notification.Builder(mContext, channel)
+            //                 .setSmallIcon(com.android.internal.R.drawable.stat_sys_data_usb)
+            //                 .setWhen(0)
+            //                 .setOngoing(true)
+            //                 .setTicker(title)
+            //                 .setDefaults(0)  // please be quiet
+            //                 .setColor(mContext.getColor(
+            //                         com.android.internal.R.color
+            //                                 .system_notification_accent_color))
+            //                 .setContentTitle(title)
+            //                 .setContentText(message)
+            //                 .setSubText(Build.ID)
+            //                 .setContentIntent(pi)
+            //                 .setVisibility(Notification.VISIBILITY_PUBLIC);
 
-                    if (titleRes
-                            == com.android.internal.R.string
-                            .usb_unsupported_audio_accessory_title) {
-                        builder.setStyle(new Notification.BigTextStyle()
-                                .bigText(message));
-                    }
-                    Notification notification = builder.build();
+            //         if (titleRes
+            //                 == com.android.internal.R.string
+            //                 .usb_unsupported_audio_accessory_title) {
+            //             builder.setStyle(new Notification.BigTextStyle()
+            //                     .bigText(message));
+            //         }
+            //         Notification notification = builder.build();
 
-                    mNotificationManager.notifyAsUser(null, id, notification,
-                            UserHandle.ALL);
-                    Slog.d(TAG, "push notification:" + title);
-                    mUsbNotificationId = id;
-                }
-            }
+            //         mNotificationManager.notifyAsUser(null, id, notification,
+            //                 UserHandle.ALL);
+            //         Slog.d(TAG, "push notification:" + title);
+            //         mUsbNotificationId = id;
+            //     }
+            // }
         }
 
         protected boolean isAdbEnabled() {

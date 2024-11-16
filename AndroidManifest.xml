@@ -52,7 +52,7 @@
                 android:value="org.lineageos.lineageparts.PartsUpdater" />
         </activity>
 
-        <activity
+        <!-- <activity
             android:name=".trust.TrustOnBoardingActivity"
             android:enabled="true"
             android:excludeFromRecents="true"
@@ -63,7 +63,7 @@
                 <action android:name="org.lineageos.lineageparts.TRUST_HINT" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity>
+        </activity> -->
 
         <receiver
             android:name=".BootReceiver"
